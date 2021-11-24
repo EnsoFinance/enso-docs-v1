@@ -1,0 +1,44 @@
+---
+id: vesting-contract
+title: Token Vesting
+sidebar_position: 2
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/token/token-vesting.mdx
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+##### An introduction to Enso Token Vesting Contract
+---
+
+## ENSO Vesting Contract
+
+Utilizing [ENSO ERC20](https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/token/token-contract.mdx) for vesting of Enso team, advisors, and investors. 
+
+Enso multisig will approve ERC20 tokens to the Vesting contract, and then `register()` each address with their `_start` date and `_end` date of Vesting.  Registered addresses, can `claim()` their tokens on a block to block basis when necessary. 
+
+
+
+##### ENSO Vesting
+- Multisig register and unregister addresses
+- Relative amount available for time passed can be claimed
+- Emergency function for updating treasury 
+- Participants are recommended to stake their claimed Enso
+
+
+### Audited and open source
+
+Contract source code can be found in [Github repository](https://github.com/EnsoFinance/token-vesting).   
+Chainsecurity audit can be found [here](https://github.com/EnsoFinance/token-vesting/blob/main/audits/ChainSecurity_EnsoLabs_Enso_Vesting_audit.pdf).  
+
+![have a look at the architecture](https://raw.githubusercontent.com/EnsoFinance/token-vesting/main/architecture/architecture.png?token=AR3VNP2WDCUIFRYTZVU4QVDBS7FSO)
+
+
+
+
+### Contract Addresses
+
+| **Contract** | **Network**    | **Address**                                |
+| ------------ | -------------- | ------------------------------------------ |
+| Vesting        | Eth Mainnet    | 0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7 |
+| Vesting        | Rinkeby        | 0x7C2668BD0D3c050703CEcC956C11Bd520c26f7d4 |

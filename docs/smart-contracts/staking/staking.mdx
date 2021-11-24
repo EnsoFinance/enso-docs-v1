@@ -1,0 +1,33 @@
+# Enso Staking
+
+#### [Staking.sol](https://github.com/EnsoFinance/staking/blob/main/src/Staking.sol)
+
+Enso tokens are staked in the `Staking` contract, which authorizes `RewardDistribution` to mint `sEnso` tokens to the staker. 
+staking for 730 days provides 300% boost in `sEnso` tokens and declines linearly to a minimum of 14 days. Stake can be extended or more tokens may be added later although full boost will not apply.
+
+#### [RewardDistribution.sol](https://github.com/EnsoFinance/staking/blob/main/src/RewardDistribution.sol)
+
+The `RewardDistribution` contract distributes rewards to `sEnso` holders proportional to balance.
+
+`sEnso` token integrates ![ERC20VotesComp](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/ERC20VotesComp.sol) allowing GovernerBravo integration.  Similar to [UniSwap](https://etherscan.io/address/0x1f9840a85d5af5bf1d1762f925bdaddc4201f984),
+governance can choose to mint a cap of `2%` additional supply per year.  Governance can vote to increase cap of `2%` on one occasion: this is a disaster recovery method.
+
+
+#### Staking
+- Users can stake anywhere between 14-730 days
+- Minimum stake amount is 0.000000000000017520 enso
+- Stake can be extended 14-n days (n = 730 - days elapsed)
+- Bonus = amount * (stake_days / 730) * 3
+- More enso tokens can be added to the stake with the boost reward relative to days remaining in current stake
+- Once a stake has expired, user must call `restake()` to stake again, or else `unstake()` to begin a 14 day timelock to withdraw enso tokens.
+- Anyone can add to another persons stake. user must send initial tx to create stake however. stakes can not be extended on behalf of someone else.
+
+#### Rewards
+- Rewards can be claimed anytime before a user calls `unstake()` and begins the process to withdraw his tokens
+- If they haven't unstaked, users can continue claim rewards after the stake expires.
+- Users can choose to reinvest their earning into their current stake as long as the stake time has not expired.
+- Enso token is the only reward token accepted
+
+## Source code
+
+[Staking](https://github.com/EnsoFinance/staking)

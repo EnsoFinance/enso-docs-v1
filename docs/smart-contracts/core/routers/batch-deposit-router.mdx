@@ -1,0 +1,13 @@
+---
+id: batch-deposit-router
+title: Batch Deposit Router
+sidebar_position: 4
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/routers/batch-deposit-router.mdx
+---
+
+##### The BatchDepositRouter is used to deposit tokens directly into a strategy from a user's wallet without making any trades. All functions other than `deposit()` will revert.
+
+---
+
+## Deposit
+The `deposit()` function takes an amount valued in WETH that the account wants to deposit. It then calculates the expected amount for each token in a [Strategy](../strategy) and calls `transferFrom` on the token to transfer the amount from the user wallet to the [Strategy](../strategy) contract. For this to work, the user must `approve()` the router for each token in the strategy and also have sufficient balances of each token for the transfers to succeed.

@@ -1,0 +1,25 @@
+---
+id: routers-overview
+title: Overview
+sidebar_position: 1
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/routers/overview.mdx
+---
+
+##### A Router is a contract that handles the main trading logic for strategy. Routers are agnostic to which strategy uses them, and Router contracts are deployed per-trading algorithm rather than per-strategy. Several functions in the `Strategy` contract take a Router address as a parameter, allowing the end-user to select a particular Router for a particular use-case. During a transaction, a Router is given complete control over a strategy's assets and, as such, they must be whitelisted to reduce risks from malicious contracts that may implement the `IStrategyRouter` interface.
+
+---
+
+## Whitelist
+The [StrategyProxyFactory](../factory) contract holds the address of the platform's current `Whitelist` contract. Anytime a contract attempts to interact with a router, it first must lookup the `Whitelist` contract and check whether the address has been approved. The whitelist is managed by Enso Finance and the community.
+
+## Rebalance
+The `rebalance()` function of the router gets called by the `rebalance()` function of the [StrategyController](controller). Different routers may implement this function in different ways depending on their trading strategy.
+
+## Deposit
+The `deposit()` function takes WETH from the `StrategyController` contract and trades it for the strategy's underlying assets.
+
+## Withdraw
+The `withdraw()` function trades a percentage of the underlying assets for WETH and sends it to the [StrategyController](controller) contract.
+
+## Delegate Swap
+To reduce the need for transferring tokens from the strategy to the controller, and then approving tokens for use on an exchange adapter, all routers implement the `_delegateSwap()` function. This function does a delegate call to a adapter's `swap()` function, so that a router can simply implement an adapter's logic without having to send any funds to the adapter contract itself.

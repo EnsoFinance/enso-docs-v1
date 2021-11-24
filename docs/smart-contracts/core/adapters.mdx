@@ -1,0 +1,35 @@
+---
+id: adapters
+title: Adapters
+sidebar_position: 5
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/adapters.mdx
+---
+
+##### An Adapter is a contract that adapts the smart contracts of an exchange, yield farm, or other DeFi protocol to a common interface that allows it to be used by a Router contract.
+
+---
+
+## Whitelist
+The [StrategyProxyFactory](factory) contract holds the address of the platform's current `Whitelist` contract. Anytime a contract attempts to interact with an adapter, it first must lookup the `Whitelist` contract and check whether the address has been approved. The whitelist is managed by Enso Finance and the community.
+
+
+## Swap
+All adapters must implement the `swap()` function in order to be usable by [Router](routers/routers-overview) contracts. Since it is expected that the [Router](routers/routers-overview) will interact with the `swap()` function via a delegate call the adapter's state variables (such as external contract addresses) must be defined in the deployment bytecode as `constant` or `immutable` variables.
+
+## Spot Price
+All adapters must implement the `spotPrice()` function in order to be usable by [Router](routers/routers-overview) contracts. This function estimates the price to exchange one token for another. Exchange fees are not included in the price estimate.
+
+## Exchanges
+Enso supports the following DEXes: Uniswap V2, Uniswap V3, Sushi, Balancer, Curve, and Synthetix. Interacting with these adapters allows a strategy to trade one token for another.
+
+## Liquidity Pools
+Enso supports the following LPs: Uniswap V2, Sushi, and Curve. Interacting with these adapters allows a strategy to provide liquidity and passively earn trading fees.
+
+## Vaults
+Enso supports YEarn and Curve Gauge Rewards.
+
+## Lending
+Enso supports Aave and Compound for lending tokens in order to earn interest.
+
+## Borrowing
+Enso supports Aave for borrowing tokens for complex strategies such as getting into leveraged positions.

@@ -1,0 +1,19 @@
+---
+id: full-router
+title: Full Router
+sidebar_position: 3
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/routers/full-router.mdx
+---
+
+##### The FullRouter contract is capable of handling deposits, withdraws, rebalances, and restructures in strategies that contain both Synth and Debt tokens.
+
+---
+
+## Rebalance
+The `rebalance()` function of the router gets called by the `rebalance()` function of the [StrategyController](controller). First, it repays any debt that is higher than what the strategy expects. Then it sells any tokens for WETH whose value is higher than expected. Then it buys any tokens whose value is lower than expected, and if there are synths in the strategy it exchanges SUSD for the appropriate synth. Finally, it borrows tokens that have a lower than expected debt.
+
+## Deposit
+The `deposit()` function takes WETH from the `StrategyController` contract and trades it for the strategy's underlying assets. First buying tokens, then synths, then borrowing tokens.
+
+## Withdraw
+The `withdraw()` function trades a percentage of the underlying assets for WETH and sends it to the [StrategyController](controller) contract. First repaying debt, then selling tokens.

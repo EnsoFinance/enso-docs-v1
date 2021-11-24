@@ -1,0 +1,43 @@
+---
+id: token-contract
+title: Enso Token
+sidebar_position: 1
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/token/token-contract.mdx
+---
+
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
+
+##### An introduction to Enso Token Contract
+---
+
+## ENSO ERC20 Contract
+
+ENSO extends the base [ERC-20 standard](https://eips.ethereum.org/EIPS/eip-20) integrating [ERC20VotesComp](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/ERC20VotesComp.sol) allowing GovernerBravo integration.  Similar to [UniSwap](https://etherscan.io/address/0x1f9840a85d5af5bf1d1762f925bdaddc4201f984), governance can choose to mint a cap of `2%` additional supply per year.  Governance can vote to increase cap of `2%` on one occasion: this is a disaster recovery method.
+
+
+##### ENSO ERC20 vs Regular ERC20
+- Checkpoints on `mint(), burn(), transfer()`
+- GovernanceBravo available due to Checkpoints
+- Vote delegation by Signature, and generic tx
+- Fixed supply
+- Burning enabled
+- Governance available mint once per year
+
+
+### Audited and open source
+
+Contract source code can be found in [Github repository](https://github.com/EnsoFinance/ENSO-ETH-Token).   
+Chainsecurity audit can be found [here](https://github.com/EnsoFinance/ENSO-ETH-Token/blob/main/audits/ChainSecurity_EnsoLabs_Enso_Token_audit.pdf).
+
+![have a look at the architecture](https://raw.githubusercontent.com/EnsoFinance/ENSO-ETH-Token/main/architecture/architecture.png?token=AR3VNP3FS7DKJ7QYEEFWGYLBS7EOS)
+
+
+
+
+### Contract Addresses
+
+| **Contract** | **Network**    | **Address**                                |
+| ------------ | -------------- | ------------------------------------------ |
+| ENSO(ERC20)        | Eth Mainnet    | 0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7 |
+| ENSO(ERC20)        | Rinkeby        | 0x7C2668BD0D3c050703CEcC956C11Bd520c26f7d4 |

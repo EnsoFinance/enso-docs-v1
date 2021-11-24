@@ -1,0 +1,13 @@
+---
+id: factory
+title: Factory
+sidebar_position: 4
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/factory.mdx
+---
+
+##### The StrategyProxyFactory is used to deploy new strategies and also stores global contract addresses such as StrategyController, EnsoOracle, Whitelist, TokenRegistry and fee pool.
+
+---
+
+## Create Strategy
+The `createStrategy()` function first deploys a proxy contract and sets the deployed [Strategy](strategy) contract as the implementation. It then adds the contract address to the [TokenRegistry](oracles/token-registry) contract and initializes the [Strategy](strategy) with relevant token metadata and its initial structure. Finally, it calls `setupStrategy()` in [StrategyController](controller) which sets the strategy state and does the first deposit.

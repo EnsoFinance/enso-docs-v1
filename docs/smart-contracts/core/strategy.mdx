@@ -1,0 +1,27 @@
+---
+id: strategy
+title: Strategy
+sidebar_position: 2
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/strategy.mdx
+---
+
+##### The Strategy contract holds all underlying assets of a strategy. It stores the state of the token distribution, acts as owner of the underlying assets, and has ERC-20 compatible features to represent user's ownership over the strategy's underlying assets.
+
+---
+
+## Storage
+The strategy keeps track of underlying assets using an array of ERC-20 token addresses. Each token is also mapped to a `uint256` value that represents the percentage that token is allotted in the strategy. A manager is able to update these values by calling the `restructure()` function in [StrategyController](controller).
+Unless a strategy is unfunded, it will also hold balances in the ERC-20 tokens that make up its underlying assets. The only way of changing the balances of the strategy are via the `rebalance()`, `withdrawETH()`, `withdrawWETH()`, `deposit()`, and `finalizeStructure()` functions in [StrategyController](controller) and `withdrawAll()` in the Strategy contract.
+
+## Withdraw
+A Strategy token holder may withdraw their share of the underlying assets by calling `withdrawAll()`. This function determines the percentage for the given amount of strategy tokens and transfer the same percentage for each asset back to account the is calling the function. Since debt cannot be transferred, this function will fail if the strategy has debt positions. Instead, a user should call `withdrawETH()` or `withdrawWETH()` in the [StrategyController](controller) contract.
+
+## ERC-20 Features
+Every strategy is also an ERC-20 token. This enables a strategy to have a high degree of liquidity. Allowing ownership tokens to be simply transferred to other users, stored in other strategies, or traded on exchanges.
+All standard ERC-20 functions are available to strategy token holders such as `transfer()`, `transferFrom()`, `approve()`, `balanceOf()` and `totalSupply()`
+
+## Proxy
+To reduce deployment costs and allow for future upgrades, all strategies are deployed using an upgradable proxy pattern. Each strategy is actually a `TransparentUpgradeableProxy` contract that implements the currently deployed Strategy contract. What this means is that the proxy holds the state and tokens, while all functions are passed as a delegate call to the `Strategy` contract to handle all logic.
+
+## Deployment
+A new strategy can be deploy by calling `createStrategy()` on the [StrategyProxyFactory](factory) contract. It will deploy a `TransparentUpgradeableProxy` contract and pass the currently deployed `Strategy` address as the proxy's implementation. Once deployed, it will call the `setupStrategy()` function on [StrategyController](controller) to set the strategy's state and purchase the underlying assets.

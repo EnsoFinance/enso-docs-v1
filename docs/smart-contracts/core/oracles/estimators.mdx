@@ -1,0 +1,13 @@
+---
+id: estimators
+title: Estimators
+sidebar_position: 3
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/oracles/estimators.mdx
+---
+
+##### An Estimator is a contract that estimates the WETH value for a specific amount of a token.
+
+---
+
+## Estimate Item
+The `estimateItem()` function takes a token address and a token amount and estimates the value based on a logic that is defined by the type of token it was built to estimate. At it's most basic, it is simply consulting a [ProtocolOracle](protocol-oracles) (such as UniswapV3 or Chainlink) to get the value of the token. But for other DeFi protocols it will estimate the token value by doing recursive estimating of the underlying tokens that are held by that token.

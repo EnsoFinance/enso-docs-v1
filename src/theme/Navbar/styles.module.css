@@ -1,0 +1,109 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/*
+Hide toggle in small viewports
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+
+@media screen and (max-width: 997px) {
+  .toggle {
+    display: none;
+  }
+}
+
+.navbarHideable {
+  transition: transform var(--ifm-transition-fast) ease;
+}
+
+.navbarHidden {
+  transform: translate3d(0, calc(-100% - 2px), 0);
+}
+
+.ensoCoButton {
+  width: 122px;
+  height: 40px;
+  background: #f2f2f2;
+  border-radius: 4px;
+  color: #000000;
+  padding: 8px 15px;
+  border: none;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  transition: 300ms ease-out;
+}
+
+.ensoCoButton:hover {
+  color: white;
+  background: #4d4d4d;
+}
+
+.githubIcon {
+  left: 0%;
+  right: 0.41%;
+  bottom: 1.18%;
+  margin-right: 32px;
+  margin-top: 7px;
+}
+
+.menuItemLinkMobile {
+  font-size: 18px;
+  color: #f2f2f2;
+}
+
+.navbar__item__style {
+  margin-right: 25px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  color: #f2f2f2;
+  padding: 0;
+}
+
+.ensoCoTextWeight {
+  font-weight: normal;
+}
+
+.ensoCoText {
+  color: #f2f2f2;
+  margin-bottom: 30px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 30px;
+  margin-left: 15px;
+}
+
+.githubIconSideBar {
+  left: 0%;
+  right: 0.41%;
+  bottom: 1.18%;
+  margin-left: 15px;
+}
+
+@media only screen and (max-width: 800px) {
+  .DocSearch-Button {
+    display: none;
+  }
+
+  .githubIcon {
+    display: none;
+  }
+
+  .ensoCoButton {
+    display: none;
+  }
+
+  .searchIcon {
+    margin-left: 150px;
+  }
+}

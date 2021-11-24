@@ -1,0 +1,19 @@
+---
+id: protocol-oracles
+title: Protocol Oracles
+sidebar_position: 2
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/oracles/protocol-oracles.mdx
+---
+
+##### A ProtocolOracle is an oracle that will wrap an external on-chain oracle service and provide token estimates using that service.
+
+---
+
+## Consult
+All protocol oracles must implement the `consult()` function which takes an amount and a token address and returns it's value in WETH.
+
+## Uniswap V3
+The `UniswapV3Oracle` uses the pool with highest liquidity and estimates the price based on an average across a time window in order reduce price manipulation via flash loans or front-running.
+
+## Chainlink
+The `ChainlinkOracle` uses Chainlink to determine the price of a token. For tokens not priced in WETH, it is able to estimate across multiple Chainlink oracles to determine the WETH price.

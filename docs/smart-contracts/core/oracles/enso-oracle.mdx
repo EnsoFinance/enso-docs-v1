@@ -1,0 +1,16 @@
+---
+id: enso-oracle
+title: Enso Oracle
+sidebar_position: 1
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/oracles/enso-oracle.mdx
+---
+
+##### The EnsoOracle estimates the total value of a strategy based on the underlying value of the assets it holds. Strategies rely upon the EnsoOracle to accurately estimate total value of it's underlying assets and to check whether the strategy is balanced both before and after any trades. This is necessary to protect the strategy's assets from being extracted during trades thus reducing the strategy's total value.
+
+---
+
+## Estimate Strategy
+The `estimateStrategy()` function is called to get the total value of the strategy as well as the individual values of each underlying asset. It does this by looking up all the underlying assets in the strategy and calling `estimateItem()` passing the token balance held by the strategy.
+
+## Estimate Item
+The `estimateItem()` function takes a token address and a token amount and estimates the value of that amount in WETH. It does this by querying the `TokenRegistry` contract for the address of the `Estimator` contract that is used to estimate that particular token. It then calls the estimator's `estimateItem()` function and returns the response.

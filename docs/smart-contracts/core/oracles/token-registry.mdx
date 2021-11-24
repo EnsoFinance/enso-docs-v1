@@ -1,0 +1,22 @@
+---
+id: token-registry
+title: Token Registry
+sidebar_position: 4
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/oracles/token-registry.mdx
+---
+
+##### The TokenRegistry is used to register Estimators for each DeFi protocol and register tokens to use a specific Estimator for estimating it's value. If a token is unregistered it will use the default estimator. This contract is owned by the StrategyProxyFactory so that it may register new strategies when they are created. All other token registrations can be done using wrapper functions in the [StrategyProxyFactory](../factory) contract.
+
+---
+
+## Add Estimator
+The `addEstimator()` function registers an [Estimator](estimators) address and maps it to the index of an `EstimatorCategory` `enum`.
+
+## Add Item
+The `addItem()` function registers a token address and maps it with the index of an `EstimatorCategory` `enum` and the index of an `ItemCategory` `enum`.
+
+## EstimatorCategory
+The `EstimatorCategory` type is an `enum` that is used to determine what [Estimator](estimators) to use for a token.
+
+## ItemCategory
+The `ItemCategory` type is an `enum` that is used to categorize the main token types recognized by a [Strategy](../strategy): Basic, Synth, Debt, and Reserve

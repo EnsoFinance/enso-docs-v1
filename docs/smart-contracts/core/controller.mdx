@@ -1,0 +1,28 @@
+---
+id: controller
+title: Controller
+sidebar_position: 3
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/controller.mdx
+---
+
+##### The StrategyController contract acts as the main interface to the Enso Protocol and, as such, it is what most users will be interacting with. The StrategyController has exclusive permission for approving and transferring tokens from Strategy contracts which allows it to manage the depositing, withdrawing, and rebalancing of assets.
+
+---
+
+
+## Manager
+The account that deploys a strategy becomes the strategy's manager. They are permissioned to use an exclusive set of functions for changing the strategy's state. The manager may restructure a strategy's underlying assets, change the acceptable slippage, rebalance threshold, or restructure time lock. The manager is also able to set the strategy from private to social, allowing other users to invest in the strategy.
+## Private vs. Social
+While the strategy is in a private state, only the manager may invest funds into the strategy. However, they are free to sell their ownership stake to other users. Also, while the strategy is private, the manager does not need to wait to restructure the strategy.
+At any point a manager may call `openStrategy()` to turn their strategy into a social strategy. This opens a strategy to investment from anyone, but it comes with some restrictions for the strategy manager. If they want to restructure their strategy, they first initiate a restructure by calling `restructure()`, then waiting for the time lock period to pass, and finally calling `finalizeStructure()` to trade out all the old tokens for the new tokens. This gives time for investors to exit their position in case the are unhappy with the proposed restructuring.
+Once a strategy is opened up for investment from other users, it cannot be made private again.
+## Flexible vs. Set
+When a strategy is 'set' it means that it does not allow any restructuring of token composition. This provides greater trustlessness for the strategy while reducing a manager's ability to adapt to changing market conditions. At any point a manager may call `setStrategy()` to turn their strategy into a set strategy. Once a strategy has been set, it cannot be undone.
+## Deposit
+On a social strategy, any account may deposit Ether by calling the strategy's `deposit()` function. The function will purchase more of the underlying assets and mint more of the strategy token to represent the account's ownership share of the strategy.
+## Withdraw
+Calling the `withdrawETH()` or `withdrawWETH()` functions will burn an amount of an account's strategy tokens and trade the equivalent amount of underlying assets for ETH or WETH respectively.
+## Rebalance
+To rebalance a strategy, a user must know which [Router](routers/routers-overview) they want to use for a rebalancing as each Router will have uniquely structure calldata that must be passed by the user to the rebalance function. With the help of the [Oracle](oracles/enso-oracle) contract, the StrategyController confirms that the strategy is balanced and has not lost value, reverting the transaction of those conditions are not met.
+## Restructure
+If a strategy is flexible (as opposed to set), a manager can restructure the token composition of the strategy however they wish. They initiate the change in structure by calling `restructure()` and passing the new asset structure. If the strategy is social they then have to wait for the time lock period to pass and then call `finalizeStructure()` to make the necessary trades (if the strategy is private, they can call `finalizeStructure()` right away).

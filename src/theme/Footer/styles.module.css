@@ -1,0 +1,114 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.footerLogoLink {
+  opacity: 0.5;
+  transition: opacity var(--ifm-transition-fast) var(--ifm-transition-timing-default);
+}
+
+.footerLogoLink:hover {
+  opacity: 1;
+}
+
+.footer {
+  z-index: 1;
+  background: #141414;
+  width: 100%;
+  height: 100%;
+  border-top: 2px solid #4d4d4d;
+  padding-left: 30px;
+  padding-top: 34px;
+  padding-bottom: 32px;
+  display: flex;
+  flex-direction: row;
+  transform-style: preserve-3d;
+}
+
+.footerTitle {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 25px;
+  color: #f2f2f2;
+  margin: 0;
+}
+
+.footerParagraph {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 25px;
+  color: #b3b3b3;
+  margin: 0;
+  transition: all var(--ifm-transition-fast) var(--ifm-transition-timing-default);
+}
+
+.ensoLogo {
+  width: 68.47px;
+  height: 22.99px;
+}
+
+.footerIcon {
+  margin-top: 2px;
+}
+
+.textFlexbox {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.textFlexbox:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.textFlexbox:hover .footerParagraph {
+  color: white;
+}
+
+.footerLinksFlexbox {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoFlexbox {
+  display: flex;
+  flex-direction: row;
+  float: right;
+  margin-left: auto;
+  margin-right: 30px;
+  margin-top: 20px;
+}
+
+.footerTitleFlexbox {
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+}
+
+@media only screen and (max-width: 800px) {
+  .footer {
+    flex-direction: column;
+  }
+
+  .textFlexbox {
+    flex-direction: column;
+    gap: none;
+  }
+
+  .logoFlexbox {
+    margin-left: 0;
+  }
+
+  .footerTitleFlexbox {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+  }
+}

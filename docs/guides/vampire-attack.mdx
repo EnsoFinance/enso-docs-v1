@@ -1,0 +1,95 @@
+---
+id: vampire-attack
+title: Vampire Attack
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/guides/vampire-attack.mdx
+---
+
+##### Official link:
+
+---
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jzdso6YGPro" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+First introduced by [SushiSwap](https://sushi.com/) to liquidity providers of [UniSwap](https://uniswap.org/) to migrate their liquidity over to Sushi through token and community incentivization.
+
+
+:::note
+
+  rP: Receiving platform(e.g. Enso, Sushiswap)
+  sP: Sending platform(E.g. Tokensets, UniSwap)
+  U : User that provides liquidity
+  LPt : Liquidity Pool Token
+
+:::
+
+**Steps for migration**
+> 1. U stakes sP LPt on rP
+2. rP publicly notifies of migration date
+3. rP migrates LPt from sP
+ ⋅⋅1. rP uses approval of U LPt
+ ⋅⋅2. burns U LPt from sP
+ ⋅⋅3. obtains underlying tokens from LPt
+ ⋅⋅4. creates 1:1 replication of LPt on rP
+ ⋅⋅5. deposits underlying LPt into rP liquidity pool
+ ⋅⋅6. U gets LPt token from rP
+4. rP activates retroactive distribution based upon TVL migrated
+
+Following this method ensures that platforms continuously have to be at the cutting edge, and build products that their users want.  As well as having token incentives aligned with community needs, and governance of the product.
+
+
+#### Who is Enso vampire attacking?
+| Tables        | Cool  |
+| ------------- |-----:|
+| col 3 is      | $1600 |
+| col 2 is      | $12 |
+| zebra stripes | are neat      |    $1 |
+
+
+
+#### Staking
+
+
+
+
+#### Migration
+
+
+
+
+
+
+```typescript
+import { useWeb3React } from '@web3-react/core'
+
+function MyComponent() {
+  const { library, chainId } = useWeb3React()
+  // library is a ethers provider/signer instance
+  // Ethereum Mainnet (1) Rinkeby (4) for the chainId
+
+  const auctionHouse = useMemo(() => {
+    if (library && chainId) {
+      return new AuctionHouse(library.getSigner(), chainId)
+    }
+  }, [library, chainId])
+  return auctionHouse ? (
+    <ManageAuction auctionHouse={auctionHouse} />
+  ) : (
+    <div>Please connect wallet</div>
+  )
+}
+```
+
+#### Hosted URLs
+
+If you want to allow easy bidding and listing of NFTs, Enso supports hosted urls where the user can interact with the [enso.finance](https://www.enso.finance/)
+interface without you needing to setup any wallet login.
+
+```typescript
+https://enso.co/collections/{TOKEN_ADDRESS}/{TOKEN_ID}/auction/list
+// Lists the given token for an auction house auction
+
+https://enso.co/collections/{TOKEN_ADDRESS}/{TOKEN_ID}/auction/bid
+// Allows the user to bid on the active auction for the given token
+```

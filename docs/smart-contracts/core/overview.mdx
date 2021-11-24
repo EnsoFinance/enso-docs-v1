@@ -1,0 +1,21 @@
+---
+id: overview
+title: Overview
+sidebar_position: 1
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/core/overview.mdx
+---
+
+##### The Enso Protocol seeks to empower users to collaboratively manage a versatile trading strategy with the freedom to utilise the entire DeFi ecosystem to their advantage. We achieve this by defining 5 core components that are integrated in a modular fashion so that components may be swapped to enable new functionality. The components that make up the Enso Protocol are the Strategy, StrategyController, Routers, Adapters, and the Oracle.
+
+---
+
+## Strategy
+The [Strategy](strategy) contract is the main storage layer of the protocol. It contains the state of the strategy such as which assets are part of the strategy, what the percent of the total strategy value each token is allotted, and the ownership shares of each user. Additionally, this contract holds all assets that are part of the strategy and gives access to the [StrategyController](controller) to trade assets on it's behalf.
+## StrategyController
+The [StrategyController](controller) is the main interface of the Enso protocol. It is the only contract that may transfer tokens from the [Strategy](strategy) or approve tokens to be transferred from the [Strategy](strategy). For any functions that require the movement of tokens (such as `rebalance` or `finalizeStructure`) the [StrategyController](controller) approves all tokens to be transferred from the [Strategy](strategy) by the [Router](routers/routers-overview). After trading takes place, approval is removed from the [Router](routers/routers-overview) and the [StrategyController](controller) ensures that there is no loss in value in the [Strategy](strategy) with the help of the [Oracle](oracles/enso-oracle) contract.
+## Routers
+[Routers](routers/routers-overview) handle the main trading logic of the protocol. They are given approval to trade on behalf of a [StrategyController](controller) and may freely transfer assets away from the the [Strategy](strategy) in order to do that. However, for security, all approvals are removed from the [Router](routers/routers-overview) upon completion of the transaction and no funds may remain within a [Router](routers/routers-overview) after a transaction. Additionally, the [StrategyController](controller) relies upon an [Oracle](oracles/enso-oracle) to ensure that there is no loss of value to the underlying assets at the completion of a transaction.
+## Adapters
+An [Adapter](adapters) provides a common interface to exchange assets, provide liquidity, or yield farm. The manager of a strategy can define the trading path needed to get into a desired token position by providing an array of adapters to handle each token exchange.
+## Oracle
+The [EnsoOracle](oracles/enso-oracle) provides a global price feed of the available assets, priced in WETH. It provides an interface where the [StrategyController](controller) may query the current valuation of all its underlying assets to determine if it needs rebalancing and to ensure that any trading by a [Router](routers/routers-overview) does not result in a loss of strategy value.
