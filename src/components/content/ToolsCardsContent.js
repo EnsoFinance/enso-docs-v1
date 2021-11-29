@@ -4,13 +4,13 @@ export const toolsCardsContent = [
     toolsVersion: 'v1.0.0',
     toolsParagraph:
       'Subgraph watching Enso protocol',
-    toolsLink: '/docs/developer-tools/subgraph/introduction',
+    toolsLink: './docs/developer-tools/subgraph/introduction',
   },
   {
     toolsTitle: 'Oracle',
     toolsVersion: 'v1.0.0',
     toolsParagraph:
       'Lookup current token price',
-    toolsLink: '/docs/smart-contracts/core/oracles/enso-oracle',
+    toolsLink: './docs/smart-contracts/core/oracles/enso-oracle',
   }
 ]
