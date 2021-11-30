@@ -9,696 +9,166 @@ custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/develop
 
 ---
 
-You can play around with the Enso Subgraph using The Graph's online [sandbox](https://thegraph.com/explorer/subgraph/EnsoFinance/enso-v1).
+This doc will teach you how to query Enso analytics by writing GraphQL queries on the subgraph. You can fetch data points like :
+
+- [Strategies info, TVL and prices](#strategy-info)
+- [Historical data for strategies and managers](#historical-data)
+- [Strategies state changes: rebalance and restructure](#strategy-structure-changes)
+
+and much more. Below are some example queries. To run a query copy and paste it into the [enso explorer](https://thegraph.com/hosted-service/subgraph/enso/enso-v1) to get fresh data.
+
+You can play around with the Enso Subgraph using The Graph's online [sandbox](https://thegraph.com/explorer/subgraph/enso/enso-v1).
 
 To programmatically query the Enso Subgraph you can send queries to:
 
-`https://api.thegraph.com/subgraphs/name/EnsoFinance/enso-v1`
+`https://api.thegraph.com/subgraphs/name/enso/enso-v1`
 
-## Enso NFT Queries (Media)
-
----
-
-NFTs minted on Enso (zNFTs) are also referred to as `media` in the subgraph
-
-### Get Media by Id
-
-```graphql
-{
-  media(id: "") {
-    id
-    metadataURI
-    contentURI
-    contentHash
-    metadataHash
-    owner {
-      id
-    }
-    ownerBidShare
-    creator {
-      id
-    }
-    creatorBidShare
-    prevOwner {
-      id
-    }
-    prevOwnerBidShare
-    approved {
-      id
-    }
-    currentBids {
-      id
-    }
-    currentAsk {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### Media by Creator
-
-```graphql
-{
-  media(where: { creator: "" }) {
-    id
-    metadataURI
-    contentURI
-    contentHash
-    metadataHash
-    owner {
-      id
-    }
-    ownerBidShare
-    creator {
-      id
-    }
-    creatorBidShare
-    prevOwner {
-      id
-    }
-    prevOwnerBidShare
-    approved {
-      id
-    }
-    currentBids {
-      id
-    }
-    currentAsk {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### Media by Owner
-
-```graphql
-{
-  media(where: { owner: "" }) {
-    id
-    metadataURI
-    contentURI
-    contentHash
-    metadataHash
-    owner {
-      id
-    }
-    ownerBidShare
-    creator {
-      id
-    }
-    creatorBidShare
-    prevOwner {
-      id
-    }
-    prevOwnerBidShare
-    approved {
-      id
-    }
-    currentBids {
-      id
-    }
-    currentAsk {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### Medias by Previous Owner
-
-```graphql
-{
-  media(where: { prevOwner: "" }) {
-    id
-    metadataURI
-    contentURI
-    contentHash
-    metadataHash
-    owner {
-      id
-    }
-    ownerBidShare
-    creator {
-      id
-    }
-    creatorBidShare
-    prevOwner {
-      id
-    }
-    prevOwnerBidShare
-    approved {
-      id
-    }
-    currentBids {
-      id
-    }
-    currentAsk {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-<br />
-
-## Bid Queries
+## Strategies Informations queries
 
 ---
 
-### Bid by Id
+Strategy created on enso. Each strategy is Tokenizes as an ERC20.
+
+## Strategy Info
 
 ```graphql
 {
-  bid(id: "") {
+  strategy(id: "") {
     id
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    sellOnShare
-    bidder {
-      id
-    }
-    recipient {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### Bids by Media
-
-```graphql
-{
-  bids(where: { media: "" }) {
-    id
-    currency {
-      id
-    }
-    amount
-    sellOnShare
-    bidder {
-      id
-    }
-    recipient {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### Bids by Currency
-
-```graphql
-{
-  bids(where: { currency: "" }) {
-    id
-    currency {
-      id
-    }
-    amount
-    sellOnShare
-    bidder {
-      id
-    }
-    recipient {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### Bids by Bidder
-
-```graphql
-{
-  bids(where: { bidder: "" }) {
-    id
-    currency {
-      id
-    }
-    amount
-    sellOnShare
-    bidder {
-      id
-    }
-    recipient {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-<br />
-
-## Asks Queries
-
----
-
-### Ask by Id
-
-```graphql
-{
-  ask(id: "") {
-    id
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    owner {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### Ask by Asker
-
-```graphql
-{
-  asks(where: { owner: "" }) {
-    id
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    owner {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### Ask by Currency
-
-```graphql
-{
-  asks(where: { currency: "" }) {
-    id
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    owner {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-<br />
-
-## InactiveBid Queries
-
----
-
-### InactiveBid by Id
-
-```graphql
-{
-  inactiveBid(id: "") {
-    id
-    type
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    sellOnShare
-    bidder {
-      id
-    }
-    recipient {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### InactiveBids by Media
-
-```graphql
-{
-  inactiveBids(where: { media: "" }) {
-    id
-    type
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    sellOnShare
-    bidder {
-      id
-    }
-    recipient {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### InactiveBids by Bidder
-
-```graphql
-{
-  inactiveBids(where: { bidder: "" }) {
-    id
-    type
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    sellOnShare
-    bidder {
-      id
-    }
-    recipient {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-<br />
-
-## InactiveAsk Queries
-
----
-
-### InactiveAsk by Id
-
-```graphql
-{
-  inactiveAsk(id: "") {
-    id
-    type
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    owner {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### InactiveAsks by Media
-
-```graphql
-{
-  inactiveAsks(where: { media: "" }) {
-    id
-    type
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    owner {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-### InactiveAsks by Asker
-
-```graphql
-{
-  inactiveAsks(where: { owner: "" }) {
-    id
-    type
-    media {
-      id
-    }
-    amount
-    currency {
-      id
-    }
-    owner {
-      id
-    }
-    createdAtTimestamp
-    createdAtBlockNumber
-  }
-}
-```
-
-<br />
-
-## UriUpdate Queries
-
----
-
-### UriUpdate by Id
-
-```graphql
-{
-  uriupdate(id: "") {
-    id
-    type
-    media {
-      id
-    }
-    from
-    to
-    owner {
-      id
-    }
-    updater {
-      id
-    }
-  }
-}
-```
-
-### UriUpdates by Updater
-
-```graphql
-{
-  uriupdates(where: { updater: "" }) {
-    id
-    type
-    media {
-      id
-    }
-    from
-    to
-    owner {
-      id
-    }
-    updater {
-      id
-    }
-  }
-}
-```
-
-### UriUpdates by Media
-
-```graphql
-{
-  uriupdates(where: { media: "" }) {
-    id
-    type
-    media {
-      id
-    }
-    from
-    to
-    owner {
-      id
-    }
-    updater {
-      id
-    }
-  }
-}
-```
-
-<br />
-
-## Transfer Queries
-
----
-
-### Transfer by Id
-
-```graphql
-{
-  transfer(id: "") {
-    id
-    media {
-      id
-    }
-    from {
-      id
-    }
-    to {
-      id
-    }
-  }
-}
-```
-
-### Transfers by Media
-
-```graphql
-{
-  transfers(where: { media: "" }) {
-    id
-    media {
-      id
-    }
-    from {
-      id
-    }
-    to {
-      id
-    }
-  }
-}
-```
-
-### Transfers by From User
-
-```graphql
-{
-  transfers(where: { from: "" }) {
-    id
-    media {
-      id
-    }
-    from {
-      id
-    }
-    to {
-      id
-    }
-  }
-}
-```
-
-### Transfers by To User
-
-```graphql
-{
-  transfers(where: { to: "" }) {
-    id
-    media {
-      id
-    }
-    from {
-      id
-    }
-    to {
-      id
-    }
-  }
-}
-```
-
-<br />
-
-## Currency Query
-
----
-
-### Currency by Id
-
-```graphql
-{
-  currency(id: "") {
-    id
+    manager
     name
     symbol
-    decimals
-    liquidity
+    state {
+      threshold
+      social
+      fee
+      slippage
+      timelock
+    }
+    nav
+    tvl
+    items {
+      token {
+        id
+        name
+      }
+      percentage
+      balance
+    }
+    totalSupply
   }
+}
+```
+
+### Strategies by Manager
+
+```graphql
+{
+  strategy(where: { manager: "" }) {
+ id
+    manager
+    name
+    symbol
+    state {
+      threshold
+      social
+      fee
+      slippage
+      timelock
+    }
+    nav
+    tvl
+    items {
+      token {
+        id
+        name
+      }
+      percentage
+      balance
+    }
+    totalSupply
+  }
+}
+```
+
+### Manager
+
+```graphql
+{
+  manager(id: "") {
+    strategiesCount
+    strategies {
+      id
+      name
+    }
+    tvl
+    totalNav
+    commonItems {
+      id
+      token
+      strategy
+      percentage
+    }
+    managerDaysData {
+      id
+      manager
+      timestamp
+      tvlLastTracked
+      totalNavLastTracked
+      strategiesAverageNav
+      holdersCount
+    }
+  }
+}
+```
+
+## Historical Data
+
+```graphql
+{
+  strategyDaysData(where: { strategy: "" }) {
+    id
+    strategy
+    timestamp
+    tvlLastTracked
+    navLastTracked
+    holdersCount
+    }
 }
 ```
 
 <br />
 
-## User Query
+## Strategy structure changes
 
 ---
 
-### User by Id
+### Rebelances by strategy
 
 ```graphql
 {
-  user(id: "") {
+  rebalance(id: "") {
     id
-    creations {
-      id
-    }
-    collection {
-      id
-    }
-    authorizedUsers {
-      id
-    }
+    txHash
+    strategy
+    timestamp
+    before
+    after
+  }
+}
+```
+
+### Restructure by strategy
+
+```graphql
+{
+  restructure(id: "") {
+    id
+    txHash
+    strategy
+    timestamp
+    before
+    after
   }
 }
 ```
