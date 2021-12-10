@@ -41,9 +41,9 @@ module.exports = {
       additionalLanguages: ['solidity', 'graphql'],
     },
     algolia: {
-      apiKey: 'ab2d24b407e8c92887c8ad13d2c2f6e7',
-      indexName: 'prod_DOCS',
-      appId: 'Y3X8RQAJBE',
+      apiKey: '871f510e3e88ecf952004c124abc5630',
+      indexName: 'Prod_Enso_Docs',
+      appId: 'LLW3KM67QU',
     },
     footer: {
       style: 'dark',
