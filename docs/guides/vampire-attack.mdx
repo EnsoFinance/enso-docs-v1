@@ -40,66 +40,11 @@ Following this method ensures that platforms continuously have to be at the cutt
 
 
 #### Who is Enso vampire attacking?
-| Tables        | Cool  |
+| Protocol        | TVL  |
 | ------------- |-----:|
-| [Tokensets](https://tokensets.com/)      |  $520,360,000 |
-| [IndexCoop](https://www.indexcoop.com/)  |  $466,880,000 |
-| [Indexed](https://indexed.finance/)      |  $14,500,000  |
-| [PieDAO](https://www.piedao.org/)        |  $16,500,000  |
-| [dHedge](https://www.dhedge.org/)        |  $21,700,000  |
-| [PowerPool](https://powerpool.finance/)  |  $19,000,000  |
-
-
-// TODO: full list of pools available
-
-
-#### Staking
-```
-
-
-```
-
-
-
-#### Migration
-
-
-
-#### Incentivization
-
-
-
-
-```typescript
-import { useWeb3React } from '@web3-react/core'
-
-function MyComponent() {
-  const { library, chainId } = useWeb3React()
-  // library is a ethers provider/signer instance
-  // Ethereum Mainnet (1) Rinkeby (4) for the chainId
-
-  const auctionHouse = useMemo(() => {
-    if (library && chainId) {
-      return new AuctionHouse(library.getSigner(), chainId)
-    }
-  }, [library, chainId])
-  return auctionHouse ? (
-    <ManageAuction auctionHouse={auctionHouse} />
-  ) : (
-    <div>Please connect wallet</div>
-  )
-}
-```
-
-#### Hosted URLs
-
-If you want to allow easy bidding and listing of NFTs, Enso supports hosted urls where the user can interact with the [enso.finance](https://www.enso.finance/)
-interface without you needing to setup any wallet login.
-
-```typescript
-https://enso.co/collections/{TOKEN_ADDRESS}/{TOKEN_ID}/auction/list
-// Lists the given token for an auction house auction
-
-https://enso.co/collections/{TOKEN_ADDRESS}/{TOKEN_ID}/auction/bid
-// Allows the user to bid on the active auction for the given token
-```
+| [Tokensets](https://tokensets.com/)      |  $466.59m |
+| [IndexCoop](https://www.indexcoop.com/)  |  $417.2m |
+| [Indexed](https://indexed.finance/)      |  $11.5m
+| [PieDAO](https://www.piedao.org/)        |  $13.72m  |
+| [dHedge](https://www.dhedge.org/)        |  $21.17m  |
+| [PowerPool](https://powerpool.finance/)  |  $18.05m  |

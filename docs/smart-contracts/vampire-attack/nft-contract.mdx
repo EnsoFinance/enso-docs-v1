@@ -35,38 +35,4 @@ Contract source code can be found in [Github repository](https://github.com/Enso
 
 | **Contract** | **Network**    | **Address**                                |
 | ------------ | -------------- | ------------------------------------------ |
-| Root1155        | Eth Mainnet    | 0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7 |
-| Root1155        | Rinkeby        | 0x7C2668BD0D3c050703CEcC956C11Bd520c26f7d4 |
-
-
-
-
-## NFT Claim
-
-Custom contact, enabling users who have Staked token from 6 victims on [LiquidityMigration contracts](liquidity-migration.mdx) to claim NFT.  Each victim has it's own unique NFT, and can be viewed on the [Vampire Attack guide](../../guides/vampire-attack.mdx).  When you have staked on [Liquidity Migration Contract](https://github.com/EnsoFinance/liquidity-migration/blob/master/contracts/LiquidityMigration.sol#L60), you can call `Claim()` on [Claimable](https://github.com/EnsoFinance/liquidity-migration/blob/master/contracts/nft/Claimable.sol#L59) with the associated index/LP token you have staked, and also the adapter address for the victim(addresses can be seen below).   
-
-Claiming is only available prior to migration.
-
-##### Claimable
-- Transfers from appoval of multisig NFT
-- 1 NFT per victim(6)
-- Stake all 6 to get a master NFT, and surprise reveal
-- Batch functionality for claiming all NFTs
-- Burn all remaining approvals remaining from multisig when migration occurs
-
-
-
-
-### Open source
-
-Contract source code can be found in [Github repository](https://github.com/EnsoFinance/liquidity-migration/blob/master/contracts/nft/Claimable.sol).
-
-![have a look at the architecture](https://raw.githubusercontent.com/EnsoFinance/liquidity-migration/master/architecture/NFTClaimArchitecture.png?token=AR3VNP62MKEP2BDDT7PIPQ3BS7M4C)
-
-
-### Contract Addresses
-
-| **Contract** | **Network**    | **Address**                                |
-| ------------ | -------------- | ------------------------------------------ |
-| Claimable        | Eth Mainnet    | 0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7 |
-| Claimable        | Rinkeby        | 0x7C2668BD0D3c050703CEcC956C11Bd520c26f7d4 |
+| Root1155        | Eth Mainnet    | 0x3a1c88addeC56e725ba2a432bC89eeaA5D068753 |
