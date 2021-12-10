@@ -7,14 +7,14 @@ export const gettingStartedContent = [
   },
   {
     docNumber: '02',
-    docTitle: 'Build an open Enso strategy →',
-    docSubtopic: 'CREATE A STRATEGY',
-    docLink: './docs/guides/create-strategy',
+    docTitle: 'Liquidity Migration →',
+    docSubtopic: 'LIQUIDITY MIGRATION CONTRACTS',
+    docLink: './docs/smart-contracts/vampire-attack/liquidity-migration',
   },
   {
     docNumber: '03',
-    docTitle: 'Manage a Enso strategy collaboratively →',
-    docSubtopic: 'MANAGE A STRATEGY',
-    docLink: './docs/guides/manage-strategy',
+    docTitle: 'NFT Claiming →',
+    docSubtopic: 'NFT Claiming ',
+    docLink: './docs/smart-contracts/vampire-attack/nft-claiming',
   },
 ]

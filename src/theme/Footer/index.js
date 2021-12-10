@@ -16,7 +16,7 @@ function Footer() {
       <div className={styles.footerLinksFlexbox}>
         <a
           className={styles.textFlexbox}
-          href="http://enso.finance/discord"
+          href="https://discord.gg/enso-finance"
           target="_blank"
           rel="noopener noreferrer"
         >
