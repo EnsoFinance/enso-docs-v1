@@ -6,7 +6,7 @@ const katex = require('rehype-katex')
 module.exports = {
   title: 'Enso Docs',
   url: 'https://enso.finance',
-  baseUrl: `${process.env.PWD}/build/index.html/`,
+  baseUrl: `/`,
   onBrokenLinks: 'ignore',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/Enso.svg',
@@ -64,7 +64,6 @@ module.exports = {
         name: 'description',
         content:
           'Enso makes DeFi social trading, and collaboratively investing with your friends easy.  All in one place.',
-
       },
     ],
   },
