@@ -1,0 +1,145 @@
+---
+id: create-strategy
+title: Create a Strategy
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/guides/create-strategy.mdx
+---
+
+##### Create an Enso strategy and open it up for investment from other Enso users
+
+---
+
+## Getting Started
+
+To create a strategy, a manager must first decide on a number of parameters to initialize their strategy. Every strategy is also an ERC-20, so the manager has to decide on the `name` (e.g. Awesome Successful Strategy) and `symbol` (e.g. ASS). Additionally, the manager will have to determine the intitial state of the strategy. There are a number of values that are used by the strategy to restrict the behaviour of the manager so that users know exactly what risks or costs are associated with investing in the strategy. The `InitialState` object is defined like so:
+
+```typescript
+type InitialState = {
+	timelock: BigNumber
+	rebalanceThreshold: BigNumber
+	rebalanceSlippage: BigNumber
+	restructureSlippage: BigNumber
+	performanceFee: BigNumber
+	social: boolean
+	set: boolean
+}
+```
+The following table gives a description of each value:
+
+| Parameter | Description | Possible values |
+| ----------|-------------|----------------:|
+| timelock | The amount of time (in seconds) that must pass between a manager initiating a state change (such as changing any of the following values or restructuring the strategy) and finalizing it in the strategy. This gives investors time to exit a strategy in case of objectionable changes. The `timelock` value is ignored in private strategies. | 0+ |
+| rebalanceThreshold | The percentage (`rebalanceThreshold/1000`) that a token needs to be out-of-balance from it's intended balance before a manager is able to call `rebalance` on the contract. A low rebalance threshold means that a strategy can be rebalanced when there is very little change in the strategy's token distribution. However, frequent unnecessary rebalances could cause considerable value loss due to slippage. | 0-1000 |
+| rebalanceSlippage | The percentage (`rebalanceSlippage/1000`) that the strategy value may slip down to due to a `rebalance` call. The lower the slippage value, the higher risk of value loss to the strategy. However, some slippage is inevitable (such as due to DEX fees and disparity between the oracle price and market spot price) and consequently there always needs to be some room for legitimate slippage | 0-1000 |
+| restructureSlippage |  Same as `rebalanceSlippage` except it's the slippage value that is checked during a `restructure` call which is expected to have more slippage than a `rebalance` call since restructuring will sometimes involve liquidating all the tokens in a strategy. Consequently, one would expect `restructureSlippage` to be lower than `rebalanceSlippage`.  | 0-1000 |
+| performanceFee | The fee that is distributed to the manager and Enso stakers based on the increase in the value of the strategy tokens. The earnings are split 70% / 30% in favour of the manager. The fee is received via the inflation of strategy tokens and so issuance of the fee causes a small drop in token value. Performance fees can only be charged on social strategies. | 0-1000 |
+| social | A boolean that allows other users to deposit into the strategy. While private strategies don't allow depositing by anyone other than a manager, they always allow token holders to withdraw. So a manger could still mint tokens in a private strategy and then sell them on a secondary market such as Uniswap or Sushi. This value can be changed from `false` to `true` at a later time by calling `openStrategy`, but it cannot be changed back. | `true` or `false` |
+| set | A boolean that restricts restructuring of a strategy. If set to true, a manager will be unable to call `restructure` and so they won't be able to change to tokens or the relative token balance of the strategy. This value can be changed from `false` to `true` at a later time by calling `setStrategy`, but it cannot be changed back. | `true` or `false` |
+
+Most importantly, the manager needs to define the composition of the strategy, i.e. what tokens are in the strategy, what percentage of the strategy value should be held in each token, and the trading paths necessary to get into the token position. This is done by passing an array of `StrategyItem` objects:
+
+```typescript
+type StrategyItem = {
+	item: string
+	percentage: BigNumber
+	data: TradeData
+}
+
+type TradeData = {
+	adapters: string[]
+	path: string[]
+	cache: string
+}
+```
+The following table gives a description of each value:
+
+| Parameter | Description | Possible values |
+| ----------|-------------|----------------:|
+| item | The address of the ERC-20 token that will be held by the strategy | Ethereum address |
+| percentage | The percentage (`percentage/1000`) of the strategy's total value that this token will comprise. | 0-1000 |
+| adapters | An array of approved adapter addresses. Each convsersion from one token (e.g. WETH) into another (e.g. DAI) requires a an adapter (e.g. UniswapV3Adapter). Multiple adapters are used for multi-hop trades. | Ethereum address array |
+| path |  An array of token addresses that represent intermediary steps on a multi-hop trade. If the trade is simply going from WETH to another token on an exchange, it likely doesn't need multiple hops and therfore this array can be empty.  | Ethereum address array |
+| cache | A flexible bytes value for advanced use cases such as leveraged token positions | Hex string |
+
+There are a few rules in order to successfully define the StrategyItem array:
+1. The percentages of all the StrategyItems must add up to 1000, any more or less and call will fail.
+2. Address `0x00...00` and `0xFF...FF` are reserved and cannot be passed in the `StrategyItem.item` parameter.
+3. In order to cheaply check that there are no duplicate tokens in the contract, we require that the StrategyItems are ordered by address from smallest to largest.
+
+Finally, once a strategy is deployed and initialized, any funds sent during the `createStrategy` call will need to be converted into the strategy's underlying token positions. So the manager will need to pass the address of the `Router` that will handle all the trading logic. If the router used is the `GenericRouter`, the manager will also need to pass the multicall `bytes` data that will handle all the trading logic.
+
+You can see it all come together in the following code:
+
+```typescript
+// Define ERC-20 metadata
+const name = 'Awesome Successful Strategy'
+const symbol = 'ASS' // Too cheeky?
+
+// Define initial state
+const timelock = BigNumber.from('604800') // 1 Week
+const rebalanceThreshold = 50 // 5%
+const rebalanceSlippage = 995 // 99.5%
+const restructureSlippage = 990 // 99%
+const performanceFee = 50 // 5%
+const social = true
+const set = false
+
+const initialState = {
+  timelock,
+  rebalanceThreshold,
+  rebalanceSlippage,
+  restructureSlippage,
+  performanceFee,
+  social,
+  set
+}
+
+// Define strategy composition
+const daiItem = {
+    item: dai.address,
+    percentage: 50,
+    data: {
+        adapters: [uniswapV3Adapter.address],
+        path: [],
+        cache: '0x'
+    }
+}
+const wbtcItem = {
+    item: wbtc.address,
+    percentage: 50,
+    data: {
+        adapters: [uniswapV3Adapter.address],
+        path: [],
+        cache: '0x'
+    }
+}
+const strategyItems = [daiItem, wbtcItem].sort((a, b) => {
+    // Convert addresses to number
+    const aNum = BigNumber.from(a.item)
+    const bNum = BigNumber.from(b.item)
+    return aNum.gt(bNum) ? 1 : -1 // Sort strategy items
+})
+
+// Create strategy
+const strategyFactoryContract = new ethers.Contract(
+    strategyFactoryAddress,
+    StrategyProxyFactory.abi,
+    signer
+)
+const tx = await strategyFactoryContract.createStrategy(
+    managerAddress,
+    name,
+    symbol,
+    initialState,
+    strategyItems,
+    loopRouterAddress, // A basic router with on-chain trading logic
+    '0x' // No data needs to be sent to router
+)
+const receipt = await tx.wait()
+
+// Get strategy address from events
+const strategyAddress = receipt.events.find(
+    (ev: Event) => ev.event === 'NewStrategy'
+).args.strategy
+```
+
+Congratulations, you've successfully created an Enso strategy!

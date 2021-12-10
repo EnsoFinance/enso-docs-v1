@@ -1,0 +1,78 @@
+---
+id: manage-strategy
+title: Manage a Strategy
+custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/guides/manage-strategy.mdx
+---
+
+##### Manage your Enso strategy
+---
+
+The main responsibility of the manager is keep their strategy balanced as the prices of the underlying tokens changes. One of the primary differences between Enso and AMM's such as Uniswap or Balancer is that it avoids impermanent loss by manually rebalancing at the discretion of the manager. A skilled manager will choose the right times to rebalance, and the right time to *refrain* from rebalancing, in order to maximize their gains.
+
+### Rebalance
+Calling rebalance is a relatively simple process. The manager just needs to define what router they would like to use to handle the trading logic. For simple use-cases, they can pass the `LoopRouter` address and no `bytes` data and all the trading logic will be handled on-chain. For advanced users, we provide the `GenericRouter` which allows the manager to define each trade off-chain and then pass a `Call[]` array that has been encoded into `bytes` to the `data` parameter of the `rebalance` function. While use of the `GenericRouter` is often cheaper, it comes with a higher risk of failed transactions due to encoding errors or stale price data.
+
+```typescript
+const controllerContract = new ethers.Contract(
+    controllerAddress,
+    StrategyController.abi,
+    signer
+)
+await controllerContract.rebalance(
+    strategyAddress,
+    loopRouterAddress,
+    '0x'
+)
+```
+
+### Restructure
+A restructure is a restricted action. What this means is that there is a delay between initiating a restructure and finalizing the new structure in the strategy. This delay gives investors a chance to exit the strategy in case they don't like the proposed changes. The first step is to propose a new `StrategyItem[]` array:
+
+```typescript
+await controllerContract.restructure(
+    strategyAddress,
+    strategyItems
+)
+```
+
+All data will get cached in the contract and the timelock will be initiated. The manager must wait for `timelock` seconds to pass before they may finalize the structure. During this time investors may exit if the don't like the new structure.
+
+Since the StrategyItems are already cached, the manager just needs to send the router address and any necessary data to the `finalizeStructure` function.
+
+```typescript
+await controllerContract.finalizeStructure(
+    strategyAddress,
+    loopRouterAddress,
+    '0x'
+)
+```
+
+This function will set the new structure in the Strategy contract and then make the necessary trades to reposition the strategy into the new composition.
+
+### Update State
+Similar to `restructure`, the `updateValue` function is also restricted by the timelock. This allows a manager to initiate the change of one of the strategy's state variables.
+
+```typescript
+enum TIMELOCK_CATEGORY {
+	RESTRUCTURE,
+	REBALANCE_THRESHOLD,
+	REBALANCE_SLIPPAGE,
+	RESTRUCTURE_SLIPPAGE,
+	TIMELOCK,
+	PERFORMANCE
+}
+
+await controllerContract.updateValue(
+    strategyAddress,
+    TIMELOCK_CATEGORY.REBALANCE_THRESHOLD, // 1
+    100, // 10%
+)
+```
+
+The function will fail if the manager passes `0` for the timelock category. This value represent a restructure, which is updated using the `restructure` function.
+
+After the timelock has passed, the manager may call `finalizeValue` to finalize it.
+
+```typescript
+await controllerContract.finalizeValue(strategyAddress)
+```

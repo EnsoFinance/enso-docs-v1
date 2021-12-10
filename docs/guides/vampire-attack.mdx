@@ -15,36 +15,76 @@ custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/guides/
 First introduced by [SushiSwap](https://sushi.com/) to liquidity providers of [UniSwap](https://uniswap.org/) to migrate their liquidity over to Sushi through token and community incentivization.
 
 
-:::note
+#### Who is Enso vampire attacking?
+| Platform | TVL  | Adapter Address |
+| ---------|------|----------------:|
+| [Tokensets](https://tokensets.com/)      |  $466.59m* | 0x5F2C716D912Ce400a8A49fB87DB722e8257257A7 |
+| [IndexCoop](https://www.indexcoop.com/)  |  $417.2m* | 0x9c9326C521895c78414BD3C2945e47AFC4Ef16cc |
+| [Indexed](https://indexed.finance/)      |  $11.5m*  | 0x8F516c0FB0bcF44CFc8D42D60dAD3E4cdb35Ce26 |
+| [PieDAO](https://www.piedao.org/)        |  $13.72m*  | 0xe149B1f2Ef564A289dc094215835f3c8Df1695aa |
+| [dHedge](https://www.dhedge.org/)        |  $21.17m*  | 0xaE6859311c341bAc4E0BcEcA0242247c16718FF1 |
+| [PowerPool](https://powerpool.finance/)  |  $18.05m*  | 0x0a883a62660328EAd442EB6c2311668ba9c12e57 |
 
-  rP: Receiving platform(e.g. Enso, Sushiswap)
-  sP: Sending platform(E.g. Tokensets, UniSwap)
-  U : User that provides liquidity
-  LPt : Liquidity Pool Token
 
-:::
+// TODO: full list of pools available
 
 **Steps for migration**
-> 1. U stakes sP LPt on rP
-2. rP publicly notifies of migration date
-3. rP migrates LPt from sP  
-    1. rP uses approval of U LPt
-    2. burns U LPt from sP
-    3. obtains underlying tokens from LPt
-    4. creates 1:1 replication of LPt on rP
-    5. deposits underlying LPt into rP liquidity pool
-    6. U gets LPt token from rP
-4. rP activates retroactive distribution based upon TVL migrated
-
-Following this method ensures that platforms continuously have to be at the cutting edge, and build products that their users want.  As well as having token incentives aligned with community needs, and governance of the product.
+> 1. Enso deploys the liquditymigration contract, setting the migration date.
+2. User stakes the liqudity pool token from the competing platform in the liquidity-migration contract.
+3. Enso migrates the liquidity pool token from the competing platform:
+    1. An Enso strategy is created that replicates the LP of the competing platform.
+    2. The 'withdraw' function is called and the LP token is burned.
+    3. Enso receives the LP's underlying tokens.
+    4. Deposits underlying tokens into the equivalent Enso strategy.
+    5. User gets tokens representing their share in the Enso strategy.
+4. Enso activates retroactive distribution of Enso tokens based upon TVL migrated
 
 
-#### Who is Enso vampire attacking?
-| Protocol        | TVL  |
-| ------------- |-----:|
-| [Tokensets](https://tokensets.com/)      |  $466.59m*  |
-| [IndexCoop](https://www.indexcoop.com/)  |  $417.2m*   |
-| [Indexed](https://indexed.finance/)      |  $11.5m*    |
-| [PieDAO](https://www.piedao.org/)        |  $13.72m*   |
-| [dHedge](https://www.dhedge.org/)        |  $21.17m*   |
-| [PowerPool](https://powerpool.finance/)  |  $18.05m*   |
+#### Staking
+
+The first step for a user to migrate their liquidity from a competing platform is to stake the liquidity pool tokens from the pool they want to migrate from. First they must approve the liquidity-migration contract to transfer their LP tokens:
+
+```typescript
+const poolContract = new ethers.Contract(
+    poolAddress,
+    ERC20.abi,
+    signer
+)
+await poolContract.approve(
+    liquidityMigrationAddress,
+    amount
+)
+```
+Then the user calls the `stake` function on the liquidity migration contract:
+
+```typescript
+const liquidityMigrationContract = new ethers.Contract(
+    liquidityMigrationAddress,
+    LiquidityMigration.abi,
+    signer
+)
+await liquidityMigrationContract.stake(
+    poolAddress,
+    amount,
+    platformAdapterAddress
+)
+```
+
+#### Migration
+
+After the timelock period has passed users will be able to migrate their liquidity to a new Enso strategy. To do this, the user must call the `migrate` function in the liquidity migration contract:
+
+```typescript
+const liquidityMigrationContract = new ethers.Contract(
+    liquidityMigrationAddress,
+    LiquidityMigration.abi,
+    signer
+)
+await liquidityMigrationContract.migrate(
+    poolAddress,
+    platformAdapterAddress,
+    strategyAddress,
+    slippage
+)
+```
+This will burn the other platform's LP tokens, mint Enso strategy tokens and send them to the user.

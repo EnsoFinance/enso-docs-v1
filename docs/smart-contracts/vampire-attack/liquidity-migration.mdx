@@ -5,9 +5,6 @@ sidebar_position: 1
 custom_edit_url: https://github.com/EnsoFinance/enso-docs/blob/main/docs/smart-contracts/vampire-attack/liquidity-migration.mdx
 ---
 
-import Tabs from '@theme/Tabs'
-import TabItem from '@theme/TabItem'
-
 ##### Liquidity Migration Contracts for Enso Vampire Attack
 
 ---
@@ -16,18 +13,21 @@ import TabItem from '@theme/TabItem'
 
 Refer to [Vampire attack guide](../../guides/vampire-attack.mdx) prior to reading this documentation, and our ![medium article](https://medium.com/ensofinance/vampire-attack-6-protocols-8d1a1454ec3f).
 
-Indicies are staked in the `LiquidityMigration` contract, which updates staked value for each staker.  Stake cannot be undone, and indicies will be unwrapped when migration occurs.  Migration can only occur by calling `migrate()` from the Enso Multisig.  In emergecy cases, Enso Multisig has right to call `refund()` only a particular stakers index which transfers the staked amount directly back to the stakers wallet. 
+## Stake
 
+To take part in the liquidity migration, a user must first stake the token that represents their share in the liquidity pool that they will be migrating from. First, they must call `approve()` on the LP token contract. Then, they need to call `stake()` on the `LiquidityMigration` contract. This function transfers the token to the `LiquidityMigration` contract and stores the `amount` staked in the contract state.
 
-##### Liquidity Migration
+## Buy and Stake
 
-- Approval of indicies into this contract, and then stake funds 
-- Stake cannot be undone
-- Emergency refund for staker direct address and amount
-- Underlying values determined through adapter contracts
-- buyAndStake best route on univ2/v3 and sushiv2 to purchase indici and stake
-- Timelock for when migration ends
+If a user does not own the LP token that they want to stake, they are able to call `buyAndStake()` in order first purchase the token then immediately stake it inside the `LiquidityMigration` contract.
 
+## Migrate
+
+After a waiting period in which the staked tokens are locked, users may migrate their liquidity to an Enso Strategy. To do this, they pass the LP token address, the protocol adapter address, and the strategy address to the `migrate()` function. This function then withdraws the underlying assets from the liquidity pool and deposits them into the Enso Strategy, burning the old LP tokens and minting new Strategy tokens.
+
+## Create Strategy
+
+To create a strategy that allows other users to migrate their liquidity to, a manager needs to deploy the strategy via the `LiquidityMigration` contract by calling `createStrategy()`. This will deploy a strategy and map it to a specific liqudity pool that other users may migrate from.
 
 ##### Open source
 
