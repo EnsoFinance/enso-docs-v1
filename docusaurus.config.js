@@ -28,7 +28,7 @@ module.exports = {
         {
           position: 'left',
           label: 'Guides',
-          to: '/docs/guides/create-strategy',
+          to: '/docs/guides/vampire-attack',
         },
       ],
     },

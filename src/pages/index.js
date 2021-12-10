@@ -25,7 +25,6 @@ export default function Home() {
             <GettingStartedCards />
             <p className={styles.tools}>Tools</p>
             <ToolsCards />
-            <p className={styles.projects}>Projects using enso</p>
             <ProjectsCards />
           </div>
         </div>
