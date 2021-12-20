@@ -25,7 +25,7 @@ function Footer() {
             <h3 className={styles.footerTitle}>Questions?</h3>
           </div>
           <p className={styles.footerParagraph}>
-            Get help in the #developers channel on Discord.
+            Get help in the #questions channel on Discord.
           </p>
         </a>
         <a
