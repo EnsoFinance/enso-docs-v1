@@ -16,9 +16,6 @@ The [StrategyProxyFactory](factory) contract holds the address of the platform's
 ## Swap
 All adapters must implement the `swap()` function in order to be usable by [Router](routers/routers-overview) contracts. Since it is expected that the [Router](routers/routers-overview) will interact with the `swap()` function via a delegate call the adapter's state variables (such as external contract addresses) must be defined in the deployment bytecode as `constant` or `immutable` variables.
 
-## Spot Price
-All adapters must implement the `spotPrice()` function in order to be usable by [Router](routers/routers-overview) contracts. This function estimates the price to exchange one token for another. Exchange fees are not included in the price estimate.
-
 ## Exchanges
 Enso supports the following DEXes: Uniswap V2, Uniswap V3, Sushi, Balancer, Curve, and Synthetix. Interacting with these adapters allows a strategy to trade one token for another.
 
